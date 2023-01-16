@@ -20,7 +20,6 @@
   when:
     - disk_copy.changed
     - not ansible_check_mode
-  ignore_errors: true
 
 - name: Define vm
   community.libvirt.virt:
