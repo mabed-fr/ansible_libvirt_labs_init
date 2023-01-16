@@ -1,28 +1,28 @@
 ---
 
 - name: Retired
-  import_tasks: retired.yml
+  ansible.builtin.import_tasks: retired.yml
   tags:
     - never
     - retired
 
 - name: Requirements
-  import_tasks: 001-requirements.yml
+  ansible.builtin.import_tasks: 001-requirements.yml
   tags:
     - libvirt_labs_init_requirements
 
 - name: Preparation of environment
-  import_tasks: 002-environmental_preparation.yml
+  ansible.builtin.import_tasks: 002-environmental_preparation.yml
   tags:
     - libvirt_labs_init_prepare
 
 - name: Configurations
-  import_tasks: 003-configurations.yml
+  ansible.builtin.import_tasks: 003-configurations.yml
   tags:
     - libvirt_labs_init_conf
 
 - name: Test & Debug
-  import_tasks: 004-test_debug.yml
+  ansible.builtin.import_tasks: 004-test_debug.yml
   tags:
     - always
 ...
