@@ -1,0 +1,21 @@
+---
+#
+#- name: Resize Disk
+#  ansible.builtin.command: |
+#    qemu-img resize {{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}_{{ item.value.name }}.qcow2 +{{ item.value.disk_size_gib }}G
+#  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
+#  when:
+#    - disk_copy.changed
+#    - not ansible_check_mode
+#
+#- name: Configure image
+#  ansible.builtin.command: |
+#    virt-customize -a {{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}_{{ item.value.name }}.qcow2 \
+#    --hostname "{{ item.value.name }}" \
+#    --root-password password:"{{ item.value.root_pass }}" \
+#    --ssh-inject 'root:file:{{ libvirt_labs_init_vm_ssh_key_path }}' \
+#    --uninstall cloud-init
+#  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
+#  when:
+#    - disk_copy.changed
+#    - not ansible_check_mode
