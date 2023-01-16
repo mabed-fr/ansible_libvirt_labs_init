@@ -1,0 +1,12 @@
+---
+
+- name: Get VMs list
+  community.libvirt.virt:
+    command: list_vms
+  register: existing_vms
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: existing_vms
+
+...

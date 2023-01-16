@@ -1,60 +1,28 @@
 ---
 
-- name: Append libvirt group with user "{{ lookup('env', 'USER') }}"
-  ansible.builtin.user:
-    name: "{{ lookup('env','USER') }}"
-    groups: libvirt
-    append: true
+- name: Retired
+  import_tasks: retired.yml
+  tags:
+    - never
+    - retired
 
-- name: Download base image and copy to libvirt
-  ansible.builtin.get_url:
-    url: "{{ item.value.url }}"
-    dest: "{{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.name }}.qcow2"
-    checksum: "{{ item.value.checksum }}"
-    mode: 0660
-  when: ( item.value.wanted | bool)
-  loop: "{{ lookup('ansible.builtin.dict', cloud_base_image, wantlist=True) }}"
+- name: Requirements
+  import_tasks: 001-requirements.yml
+  tags:
+    - libvirt_labs_init_requirements
 
-- name: Copy base image to libvirt directory
-  ansible.builtin.copy:
-    src: "{{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}.qcow2"
-    dest: "{{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}_{{ item.value.name }}.qcow2"
-    force: false
-    remote_src: true
-    mode: 0660
-  register: disk_copy
-  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
+- name: Preparation of environment
+  import_tasks: 002-environmental_preparation.yml
+  tags:
+    - libvirt_labs_init_prepare
 
-- name: Resize Disk
-  ansible.builtin.command: |
-    qemu-img resize {{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}_{{ item.value.name }}.qcow2 +{{ item.value.disk_size_gib }}G
-  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
-  when:
-    - disk_copy.changed
-    - not ansible_check_mode
+- name: Configurations
+  import_tasks: 003-configurations.yml
+  tags:
+    - libvirt_labs_init_conf
 
-- name: Configure image
-  ansible.builtin.command: |
-    virt-customize -a {{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}_{{ item.value.name }}.qcow2 \
-    --hostname "{{ item.value.name }}" \
-    --root-password password:"{{ item.value.root_pass }}" \
-    --ssh-inject 'root:file:{{ libvirt_labs_init_vm_ssh_key_path }}' \
-    --uninstall cloud-init \
-    --install "{{ libvirt_labs_init_install_packages }}"
-  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
-  when:
-    - disk_copy.changed
-    - not ansible_check_mode
-
-- name: Define vm
-  community.libvirt.virt:
-    command: define
-    xml: "{{ lookup('template', 'files/Linux-base.xml.j2') }}"
-  loop: "{{ lookup('ansible.builtin.dict', vms) }}"
-
-- name: Ensure VM is started
-  community.libvirt.virt:
-    name: "{{ item.value.name }}"
-    state: running
-  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
+- name: Test & Debug
+  import_tasks: 004-test_debug.yml
+  tags:
+    - always
 ...
