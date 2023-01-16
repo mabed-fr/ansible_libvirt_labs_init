@@ -1,0 +1,33 @@
+---
+
+- name: Shutdown VM
+  community.libvirt.virt:
+    name: "{{ item.value.name }}"
+    command: shutdown
+  loop: "{{ lookup('ansible.builtin.dict', vms) }}"
+  tags:
+    - shutdown
+
+- name: Destroy VM
+  community.libvirt.virt:
+    name: "{{ item.value.name }}"
+    command: destroy
+  loop: "{{ lookup('ansible.builtin.dict', vms) }}"
+  tags:
+    - destroy
+
+- name: Undefine VM
+  community.libvirt.virt:
+    name: "{{ item.value.name }}"
+    command: undefine
+  loop: "{{ lookup('ansible.builtin.dict', vms) }}"
+  tags:
+    - undefine
+
+- name: Remove file (delete file)
+  ansible.builtin.file:
+    path: "{{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}_{{ item.value.name }}.qcow2"
+    state: absent
+  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
+
+...

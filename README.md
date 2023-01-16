@@ -16,6 +16,7 @@ Configurer rapidement un labs libvirt(kvm)
 ## ⚠️ Requirements
 
 Ansible >= 2.1.
+libvirt-python (pip install)
 
 ### Ansible role dependencies
 
@@ -96,13 +97,18 @@ Variables loaded from `vars/main.yml`.
 ### ✏️ Example host_vars / group_vars
 
 I want to have :
-* 2 apache fronts  Debian11
-* 1 haproxy loadbalancer Debian11
-* packages atop & locate
+* 2 apache fronts  Debian11 --> 4vcpu
+* 1 haproxy loadbalancer Debian11 --> 2vcpu
+* Packages atop & locate
+* DISK 10GO
+* 2 Go RAM
+
 
 ```yaml
 ---
 libvirt_labs_init_install_packages: "atop,locate"
+libvirt_labs_init_debian_11_wanted: true
+
 vms:
   haproxy_lb:
     name: "haproxy_lb"
@@ -142,3 +148,22 @@ vms:
     packages: "{{ libvirt_labs_init_install_packages }}"
 ...
 ```
+
+Init your lab ? Play !
+
+```shell
+
+ansible-playbook site.yml --limit "localhost" -D
+
+```
+
+
+Need clean UP ? Play !
+
+
+```shell
+
+ansible-playbook site.yml --limit "localhost" -D --tags retired
+
+```
+

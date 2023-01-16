@@ -1,0 +1,13 @@
+---
+
+- name: Append libvirt group with user "{{ lookup('env', 'USER') }}"
+  ansible.builtin.user:
+    name: "{{ lookup('env','USER') }}"
+    groups: libvirt
+    append: true
+
+- name: Install libvirt-python
+  ansible.builtin.pip:
+    name: libvirt-python
+
+...

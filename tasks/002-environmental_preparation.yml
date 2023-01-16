@@ -1,0 +1,22 @@
+---
+
+- name: Download base image and copy to libvirt
+  ansible.builtin.get_url:
+    url: "{{ item.value.url }}"
+    dest: "{{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.name }}.qcow2"
+    checksum: "{{ item.value.checksum }}"
+    mode: 0660
+  when: ( item.value.wanted | bool)
+  loop: "{{ lookup('ansible.builtin.dict', cloud_base_image, wantlist=True) }}"
+
+- name: Copy base image to libvirt directory
+  ansible.builtin.copy:
+    src: "{{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}.qcow2"
+    dest: "{{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}_{{ item.value.name }}.qcow2"
+    force: false
+    remote_src: true
+    mode: 0660
+  register: disk_copy
+  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
+
+...
