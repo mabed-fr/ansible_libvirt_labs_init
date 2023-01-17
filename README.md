@@ -12,6 +12,7 @@ Configurer rapidement un labs libvirt(kvm)
 | Platform | Versions |
 |----------|----------|
 | Debian | 11 |
+| Debian | 10 |
 
 ## ⚠️ Requirements
 
