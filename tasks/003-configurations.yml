@@ -12,10 +12,13 @@
   ansible.builtin.command: |
     virt-customize -a {{ libvirt_labs_init_libvirt_pool_dir }}{{ item.value.os }}_{{ item.value.name }}.qcow2 \
     --hostname "{{ item.value.name }}" \
+    --timezone "Europe/Paris" \
     --root-password password:"{{ item.value.root_pass }}" \
     --ssh-inject 'root:file:{{ libvirt_labs_init_vm_ssh_key_path }}' \
     --uninstall cloud-init \
-    --install "{{ libvirt_labs_init_install_packages }}"
+    --install "{{ libvirt_labs_init_install_packages }}" \
+  #  --firstboot-command "growpart /dev/vda 1 -u auto" \
+  #  --firstboot-command "resize2fs /dev/vda1" \
   loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
   when:
     - disk_copy.changed
@@ -25,7 +28,7 @@
   community.libvirt.virt:
     command: define
     xml: "{{ lookup('template', 'files/Linux-base.xml.j2') }}"
-  loop: "{{ lookup('ansible.builtin.dict', vms) }}"
+  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
   notify: Ensure VM is started
 
 ...

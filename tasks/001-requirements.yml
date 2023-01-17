@@ -10,4 +10,10 @@
   ansible.builtin.pip:
     name: libvirt-python
 
+- name: Install list of package
+  ansible.builtin.apt:
+    name: '{{ libvirt_labs_init_needed_packages }}'
+    state: present
+  when: ansible_facts['os_family'] == 'Debian'
+
 ...

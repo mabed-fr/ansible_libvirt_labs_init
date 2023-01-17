@@ -1,18 +1,10 @@
 ---
 
-- name: Shutdown VM
-  community.libvirt.virt:
-    name: "{{ item.value.name }}"
-    command: shutdown
-  loop: "{{ lookup('ansible.builtin.dict', vms) }}"
-  tags:
-    - shutdown
-
 - name: Destroy VM
   community.libvirt.virt:
     name: "{{ item.value.name }}"
     command: destroy
-  loop: "{{ lookup('ansible.builtin.dict', vms) }}"
+  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
   tags:
     - destroy
 
@@ -20,7 +12,7 @@
   community.libvirt.virt:
     name: "{{ item.value.name }}"
     command: undefine
-  loop: "{{ lookup('ansible.builtin.dict', vms) }}"
+  loop: "{{ lookup('ansible.builtin.dict', vms, wantlist=True) }}"
   tags:
     - undefine
 

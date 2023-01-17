@@ -2,13 +2,42 @@
 
 libvirt_labs_init_dest_download_images: "/tmp/"
 libvirt_labs_init_libvirt_pool_dir: "/var/lib/libvirt/images/"
+libvirt_labs_init_fedora_37_wanted: false
+libvirt_labs_init_debian_12_wanted: false
 libvirt_labs_init_debian_11_wanted: true
-libvirt_labs_init_debian_10_wanted: false
+libvirt_labs_init_debian_10_wanted: true
+libvirt_labs_init_debian_9_wanted: false
+libvirt_labs_init_ubuntu_22_04_wanted: false
+libvirt_labs_init_ubuntu_20_04_wanted: false
+
 libvirt_labs_init_vm_global_root_pass: "root"
 libvirt_labs_init_vm_ssh_key_path: "/home/$USER/.ssh/id_rsa.pub"
-libvirt_labs_init_install_packages: "smem,htop"
+libvirt_labs_init_install_packages: "htop"
+libvirt_labs_init_needed_packages:
+  - libguestfs-tools
+
 
 cloud_base_image:
+  Ubuntu_22_04:
+    name: "Ubuntu_22_04"
+    url: "https://cloud-images.ubuntu.com/jammy/20230110/jammy-server-cloudimg-amd64.img"
+    checksum: "sha256:71657529fc067dbda2537762730904a68905ae1202a30ec00a645828506939df"
+    wanted: "{{ libvirt_labs_init_ubuntu_22_04_wanted }}"
+  Ubuntu_20_04:
+    name: "Ubuntu_20_04"
+    url: "https://cloud-images.ubuntu.com/focal/20230111/focal-server-cloudimg-amd64.img"
+    checksum : "sha256:2aa7fb737962f00da3ac21f542dff7f8d966ee10a4e99de9422d406107e74d92"
+    wanted: "{{ libvirt_labs_init_ubuntu_20_04_wanted }}"
+  Fedora_37:
+    name: "Fedora_37"
+    url: "https://mirror.in2p3.fr/pub/fedora/linux/releases/37/Cloud/x86_64/images/Fedora-Cloud-Base-37-1.7.x86_64.qcow2"
+    checksum: "sha256:b5b9bec91eee65489a5745f6ee620573b23337cbb1eb4501ce200b157a01f3a0"
+    wanted: "{{ libvirt_labs_init_fedora_37_wanted }}"
+  Debian_12:
+    name: "Debian_12"
+    url: "https://cdimage.debian.org/cdimage/cloud/bookworm/daily/20230116-1262/debian-12-generic-amd64-daily-20230116-1262.qcow2"
+    checksum: "sha512:3f6c7ffaea6fe907310fbf57213b05de432a04ff6835531d807ebae13626fd8488320d736a1b4fa29fe36cb870de8df8c5d0f46f1899caf35ae4b061756255be"
+    wanted: "{{ libvirt_labs_init_debian_12_wanted }}"
   Debian_11:
     name: "Debian_11"
     url: "https://cloud.debian.org/images/cloud/bullseye/20221219-1234/debian-11-generic-amd64-20221219-1234.qcow2"
@@ -19,4 +48,9 @@ cloud_base_image:
     url: "https://cloud.debian.org/images/cloud/buster/20221224-1239/debian-10-generic-amd64-20221224-1239.qcow2"
     checksum: "sha512:86b7a2265012283ac683a88d6613184bc2f10aef7c285d83679252609411c72020bd38ac8db30eb74f0190d7c9463f9b9630c5394516d829f0fd000cafc57fe9"
     wanted: "{{ libvirt_labs_init_debian_10_wanted }}"
+  Debian_9:
+    name: "Debian_9"
+    url: "https://cdimage.debian.org/cdimage/cloud/stretch/daily/20200210-166/debian-9-nocloud-amd64-daily-20200210-166.qcow2"
+    checksum: "sha512:f44a8dae367fbf9742054606afd6b6d1af013c93607215765947a37e27e1ae39fb59ad107dde7e0b2f3f2a2663007a6b7b2677adf4b618e091b73ec9bebae2f8"
+    wanted: "{{ libvirt_labs_init_debian_9_wanted }}"
 ...
