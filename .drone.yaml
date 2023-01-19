@@ -1,0 +1,63 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+# ONLY ON SUPPORTED OS
+
+steps:
+- name: Ubuntu jammy
+  image: ubuntu:jammy
+  commands:
+  - apt update
+  - apt install python3 pyhton3-pip git -y
+  - pip install ansible==7
+
+- name: Ubuntu Focal
+  image: ubuntu:focal
+  commands:
+  - apt update
+  - apt install python3 pyhton3-pip git -y
+  - pip install ansible==7
+
+- name: Ubuntu Bionic
+  image: ubuntu:bionic
+  commands:
+  - apt update
+  - apt install python3 pyhton3-pip git -y
+  - pip install ansible==7
+
+- name: Debian 12
+  image: Debian:bookworm
+  commands:
+  - apt update
+  - apt install python3 pyhton3-pip git -y
+  - pip install ansible==7
+
+- name: Debian 11
+  image: Debian:bulleyes
+  commands:
+  - apt update
+  - apt install python3 pyhton3-pip git -y
+  - pip install ansible==7
+
+- name: Debian 10
+  image: Debian:buster
+  commands:
+  - apt update
+  - apt install python3 pyhton3-pip git -y
+  - pip install ansible==7
+
+- name: Fedora 38
+  image: fedora:38
+  commands:
+  - dnf install pyhton3 python3-pip git -y
+  - pip install ansible==7
+
+- name: Fedora 38
+  image: fedora:37
+  commands:
+  - dnf install pyhton3 python3-pip git -y
+  - pip install ansible==7
+
+...
